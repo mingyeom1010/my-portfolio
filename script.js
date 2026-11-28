@@ -1,31 +1,64 @@
 
-// 현재 연도 자동 표시
-const footer = document.querySelector("footer");
+// =========================
+// 1. 모바일 메뉴 설정
+// =========================
 
-footer.innerHTML = `<p>© ${new Date().getFullYear()} My Portfolio. All Rights Reserved.</p>`;
+const menuToggle = document.getElementById("menuToggle");
+const navMenu = document.getElementById("navMenu");
 
-// TOP 버튼 생성
-const topButton = document.createElement("button");
+menuToggle.addEventListener("click", function () {
 
-topButton.textContent = "TOP";
+    navMenu.classList.toggle("active");
 
-topButton.style.position = "fixed";
-topButton.style.bottom = "30px";
-topButton.style.right = "30px";
-topButton.style.padding = "12px 18px";
-topButton.style.backgroundColor = "#238636";
-topButton.style.color = "white";
-topButton.style.border = "none";
-topButton.style.borderRadius = "6px";
-topButton.style.cursor = "pointer";
+    const isOpen = navMenu.classList.contains("active");
 
-// 버튼 클릭 시 맨 위로 이동
-topButton.addEventListener("click", function() {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+    menuToggle.setAttribute("aria-expanded", isOpen);
 });
 
-// 화면에 버튼 추가
-document.body.appendChild(topButton);
+
+// =========================
+// 2. 메뉴 클릭 시 자동 닫기
+// =========================
+
+const navLinks = document.querySelectorAll(".nav-menu a");
+
+navLinks.forEach(function (link) {
+
+    link.addEventListener("click", function () {
+
+        navMenu.classList.remove("active");
+
+        menuToggle.setAttribute("aria-expanded", "false");
+
+    });
+
+});
+
+
+// =========================
+// 3. 스크롤 애니메이션
+// =========================
+
+const sections = document.querySelectorAll(".section");
+
+const observer = new IntersectionObserver(function (entries) {
+
+    entries.forEach(function (entry) {
+
+        if (entry.isIntersecting) {
+
+            entry.target.classList.add("show");
+
+        }
+
+    });
+
+}, {
+    threshold: 0.1
+});
+
+sections.forEach(function (section) {
+
+    observer.observe(section);
+
+});
